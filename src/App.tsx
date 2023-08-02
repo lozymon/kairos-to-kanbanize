@@ -13,6 +13,15 @@ function App() {
     const [inputData, setInputData] = useState('');
     const [list, setList] = useState<List[]>([]);
 
+    const setSelected = useCallback(
+        (index: number, select: boolean) => {
+            const d = [...list];
+            d[index].selected = select;
+            setList(d);
+        },
+        [list]
+    );
+
     const header = useMemo<ListHeader[]>(
         () => [
             {
@@ -38,7 +47,7 @@ function App() {
             },
             { name: 'Hora em decimal', field: 'calc', right: true },
         ],
-        []
+        [setSelected]
     );
 
     const footer = useMemo<ListFooter[]>(
@@ -74,12 +83,6 @@ function App() {
     useEffect(() => {
         setList(convertData(inputData));
     }, [inputData]);
-
-    const setSelected = useCallback((index: number, select: boolean) => {
-        const d = [...list];
-        d[index].selected = select;
-        setList(d);
-    }, []);
 
     return (
         <div className="container">
